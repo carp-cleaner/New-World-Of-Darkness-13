@@ -1,0 +1,4 @@
+author: "chazzyjazzy"
+delete-after: True
+changes:
+  - bugfix: "Fixed Thaumaturgy Path of Blood 3 'blood of potency' from not working as intended."

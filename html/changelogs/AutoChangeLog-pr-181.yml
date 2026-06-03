@@ -1,0 +1,6 @@
+author: "Garrruss"
+delete-after: True
+changes:
+  - bugfix: "фикс 4 точки смоук синтая"
+  - bugfix: "фикс 5 точки смоук синтая"
+  - bugfix: "небольшое исправление синтаксиса"

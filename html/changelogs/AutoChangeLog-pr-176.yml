@@ -1,0 +1,7 @@
+author: "Nokia2Student"
+delete-after: True
+changes:
+  - rscadd: "Делириум"
+  - refactor: "Переменная potential -> potence_bonus"
+  - balance: "Гару также падают если прыгают в кого-то"
+  - balance: "Хантеры, омоновцы и полиция теперь стреляют только по криносам, хиспо и волко-люпусам"

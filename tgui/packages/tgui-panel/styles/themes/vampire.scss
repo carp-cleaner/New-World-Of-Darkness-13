@@ -1,0 +1,14 @@
+/**
+ * Vampire The Masquerade Theme
+ */
+@use 'sass:meta';
+
+@include meta.load-css('~tgui/styles/themes/vampire.scss');
+
+.theme-vampire {
+  @include meta.load-css('../tgchat/chat-vampire.scss');
+
+  .Layout__content {
+    background-image: none;
+  }
+}

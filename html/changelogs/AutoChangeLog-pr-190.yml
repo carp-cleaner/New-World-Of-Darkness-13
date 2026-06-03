@@ -1,0 +1,5 @@
+author: "TwitterTwiner"
+delete-after: True
+changes:
+  - bugfix: "Баги с наркотой"
+  - refactor: "Рефакторинг кода наркоты"

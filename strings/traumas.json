@@ -1,0 +1,204 @@
+{
+	"brain_damage": [
+	   "Я ПОНИ ПОНИ  ИЕЕЕХАААААААААА!!!",
+	   "Без гейлода сопля не эволюционирует???",
+	   "ТЫ ХУЙЛО!!!",
+	   "ПОМОГИТЕПОМОГИТЕПОМОГИТЕПОМОГИТЕ!!!",
+	   "ДАЙ МАНКИ ДАЙ МАНКИ???",
+	   "Я сбежал из зоопарка",
+	   "Хуйню можно творить из подручных средств",
+	   "Я ХОЧУ ПАГЛАДИТЬ ЭТИХ МАРТЫШОК",
+	   "папОЧКА не нада!!!!",
+	   "ОСТЛАВИНИ ЕТО!!!",
+	   "Даше не знаю што сказать...!",
+	   "ЯРРРРР",
+	   "Сасать!!",
+	   "Ебнем тебя в о4ко!",
+	   "начни меня",
+	   "мой рука лицо",
+	   "Шахнуть бы 100 грамчиков!",
+	   "ваааааааааааххххх!!!",
+	   "красный альбинос идет быстро",
+	   "ЗА ИМПИРИЮ",
+	   "Щоколадка",
+	   "чертвы биокарлики, чертвы биокарлики",
+	   "МАГНУС НЕ ПРЕДОВАЛ",
+	   "мны стделали ето ратди хаососа",
+	   "Я ЗАПЕРТ В КЛЕТКЕ ПЛОТИ.",
+	   "губка щас будет цвести",
+	   "ПАКЕТИК!!!",
+	   "порт док!!!!",
+	   "НАЗОВИ МОЁ ИМЯ!!!!!!!!",
+	   "кто слышит мои мысли",
+	   "закрыт для ПОСЕЩЕНИЯ",
+	   "Молись можешь ты???",
+	   "Жду тебя пупсик!!!!",
+	   "Ти даун!",
+	   "ПОМОГИТЕ МЕНЯ НАСИЛУЮТ!!!",
+	   "Чо ето  значет?????",
+	   "ВЫЗОВИТЕ ТАКСИ!!!!!",
+	   "ИДИ НАХУЙ",
+	   "Йа сдоровый",
+	   "ето мой хород......",
+	   "Ты теперь пендос, ты теперь с Сан-Франциско, а кругом стадо?!!!!",
+	   "ДИ НАХУ",
+	   "Представитель экваториальной расы",
+	   "Войн тьмы?",
+	   "Я так то миллионер!",
+	   "ППШ ШУЕ",
+	   "Меня преследуют... ",
+	   "УСТАНОВИТЕ Исинини адасай адасай",
+	   "ПЕНДОСЫ....",
+	   "Я ЗДЕСЬ ВЛАСТЬ",
+	   "Я руззкий",
+	   "Я Найкраще сало",
+	   "Я ПОЛУЧИЛ ЯЙЦА-СТАЛЬ",
+	   "Я ТЯ ПРИБЬЮ НАХУЙ СУКА КАК ДЕД",
+	   "ЩАС ВКРАДУ ГАЗ!!!",
+	   "Слава нам",
+	   "Для кого-то ты сделал этот мир ещё более печальным местом.",
+	   "ШТААААААААА?",
+	   "Я кошка муррр, я кошка муррр...",
+	   "Пожалуйста, УБЕЙТЕ МЕНЯ!!!",
+	   "ЧЕЗАХЕРНЯ????",
+	   "ДАУНЫЫЫ!!! ОБЩИЙ СБОР.",
+	   "ВЭЛКОМ ТУ ОДЕССА ",
+	   "ДАЖЕ НЭ ТРОГАЙ МИНЯ",
+	   "Пляж бомжи секси голые зонтики.",
+	   "Это как восемь двенадцать но безумие Ваас",
+	   "В ОДЕССЕ -СЕМЕН МАРКОВИЧ, ГОВОРЯТ ВЫ БЫЛИ В СТРИПТИЗЕ? - ОЙ, ЯША! ТАКИ ДА! 50 ДОЛЛАРОВ В БИКИНИ ДЕВОЧЕК ПОЛОЖИЛ, 100 ЕВРО ВЫТАЩИЛ. И ОТДОХНУЛ, И ЗАРАБОТАЛ????"
+   ],
+
+    "mutations": [
+        "telikesis",
+        "halk",
+        "eppilapse",
+        "kamelien",
+        "eksrey",
+        "glowey skin",
+        "fungal tb",
+        "stun gloves"
+    ],
+
+    "george": [
+        "joerge",
+        "george",
+        "gorge",
+        "gdoruge"
+    ],
+
+    "mellens": [
+        "mellens",
+        "melons",
+        "mwrlins"
+    ],
+    "random_gibberish": [
+        "g",
+        "squid",
+        "r",
+        "carbon dioxide"
+    ],
+
+    "y_replacements": [
+        "y",
+        "i",
+        "e"
+    ],
+
+    "servers": [
+        "bager",
+        "sybl",
+        "mrs sybil",
+        "mr basil",
+        "mr terry",
+        "berry",
+        "vent hell",
+        "colonel hall"
+    ],
+
+    "create_verbs": [
+        "spawn",
+        "MAke me",
+        "creat",
+        "tc trade me",
+        "gib"
+    ],
+
+    "create_nouns": [
+        "zenomorfs",
+        "ayleins",
+        "treaitors",
+        "sheadow lings",
+        "abdoocters",
+        "revinent",
+        "deval",
+        "deth squads",
+        "bleb",
+        "cock cult",
+        "anteg"
+    ],
+
+    "bug": [
+        "",
+        "IS TIS A BUG??",
+        "SI IST A BUGG/",
+        "BUG!!!"
+    ],
+
+    "semicolon": [
+        "",
+        ";",
+        ".h"
+    ],
+
+    "god_foe": [
+        "MORTALS",
+        "HERETICS",
+        "INSECTS",
+	"UNBELIEVERS",
+	"BLASPHEMERS",
+	"PARASITES",
+	"WEAKLINGS",
+	"PEASANTS"
+    ],
+
+    "god_aggressive": [
+        "BEGONE, @pick(god_foe)!",
+        "DIE, @pick(god_foe)!",
+        "BLEED, @pick(god_foe)!",
+	"BURN, @pick(god_foe)!",
+	"ALL WILL FALL BEFORE ME!",
+	"ENDLESS SUFFERING AWAITS YOU, @pick(god_foe).",
+	"DEATH TO @pick(god_foe)!"
+    ],
+
+    "god_neutral": [
+        "STOP",
+	"HALT.",
+        "BE SILENT.",
+        "QUIET",
+	"SEE THE TRUTH BEFORE YOU, MORTALS.",
+	"MORTALS, SAY YOUR NAME",
+	"BEGONE, MORTALS.",
+	"BE HEALED, MORTALS. I AM FEELING MERCIFUL.",
+	"DANCE FOR ME, LITTLE MORTALS.",
+	"YOU. STOP.",
+	"REST, MORTALS, TOMORROW IS A LONG DAY.",
+	"YOU MORTALS MAKE ME SICK.",
+	"HONK..."
+    ],
+
+    "god_unstun": [
+	"GET UP. I HAVE NO TIME TO LOSE.",
+	"GET UP, PRIEST.",
+	"GET UP."
+    ],
+
+    "god_heal": [
+	"YOU WILL LIVE TO SEE ANOTHER DAY.",
+	"YOU SHALL SURVIVE THIS, MY PRIEST.",
+	"BE HEALED, PRIEST.",
+	"YOUR LIFE IS IMPORTANT. KEEP IT."
+    ]
+
+}

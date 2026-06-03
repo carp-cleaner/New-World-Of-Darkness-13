@@ -1,0 +1,5 @@
+author: "TwitterTwiner"
+delete-after: True
+changes:
+  - rscdel: "Костыль"
+  - bugfix: "Забыл добавить проку"

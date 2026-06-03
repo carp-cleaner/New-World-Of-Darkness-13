@@ -1,0 +1,9 @@
+author: "TwitterTwiner"
+delete-after: True
+changes:
+  - rscadd: "Многа багов"
+  - rscdel: "Мала багов"
+  - bugfix: "Мапа"
+  - bugfix: "Глаза сетитов теперь видят точки"
+  - bugfix: "Кода Артемина, чтобы не было рантаймов от святош"
+  - bugfix: "Поворот экрана наркоты"

@@ -1,0 +1,4 @@
+author: "carp-cleaner"
+delete-after: True
+changes:
+  - rscadd: "Пятый смок синтай невидим для НПС"

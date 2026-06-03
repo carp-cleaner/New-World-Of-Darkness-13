@@ -1,0 +1,5 @@
+author: "TwitterTwiner"
+delete-after: True
+changes:
+  - rscadd: "Очки"
+  - rscdel: "Опыт"

@@ -1,0 +1,123 @@
+.middle {
+    width: 80px;
+}
+
+.right {
+    width: 150px;
+}
+
+.reason {
+    resize: none;
+    min-height: 40px;
+    width: 340px;
+}
+
+.rolegroup {
+    padding: 3px;
+    width: 430px;
+    border: none;
+    text-align: center;
+    outline: none;
+    display: inline-block;
+	font-weight: bold;
+}
+
+.long {
+    width: 860px;
+}
+
+.content {
+    text-align: center;
+}
+
+.command {
+    background-color: #948f02;
+}
+
+.security {
+    background-color: #a30000;
+}
+
+.engineering {
+    background-color: #fb5613;
+}
+
+.medical {
+    background-color: #337296;
+}
+
+.science {
+    background-color: #993399;
+}
+
+.supply {
+    background-color: #a8732b;
+}
+
+.silicon {
+    background-color: #ff00ff;
+}
+
+.abstract {
+    background-color: #708090;
+}
+
+.service {
+    background-color: #6eaa2c;
+}
+
+.ghostandotherroles {
+    background-color: #5c00e6;
+}
+
+.antagonistpositions {
+    background-color: #6d3f40;
+}
+
+
+.camarilla {
+	background-color: #00008B
+}
+
+.primogencouncil{
+	background-color: #FF8C00
+}
+
+.tremere {
+	background-color: #B22222
+}
+
+.anarch {
+	background-color: #5d534f
+}
+
+.giovanni {
+	background-image: linear-gradient(to right, #009246,white,#CE2B37);
+	color: black
+}
+
+.clantzimisce {
+	background-image: linear-gradient(to right, #050092,rgb(255, 255, 0),#CE2B37);
+	color: black
+}
+
+.lawenforcement {
+	background-color: #009fd4
+}
+
+.warehouse {
+	background-color: #964B00
+}
+
+.triad {
+	background-color: #C69DD2
+}
+
+.citizen {
+	background-color: #ddf3f3;
+	color: black
+}
+
+.endron {
+	background-color: #088511
+}

@@ -1,0 +1,621 @@
+/mob/living
+	var/mass_presencer
+
+/datum/discipline/presence
+	name = "Presence"
+	desc = "Makes targets in radius more vulnerable to damages."
+	icon_state = "presence"
+	power_type = /datum/discipline_power/presence
+
+/datum/discipline_power/presence
+	name = "Presence power name"
+	desc = "Presence power description"
+
+	vitae_cost = 0
+
+	activate_sound = 'code/modules/wod13/sounds/presence_activate.ogg'
+	deactivate_sound = 'code/modules/wod13/sounds/presence_deactivate.ogg'
+
+/datum/discipline_power/presence/activate(mob/living/target)
+	. = ..()
+	if(iscathayan(target))
+		var/mob/living/carbon/human/cathayan_target = target
+		if(cathayan_target.mind.dharma?.Po == "Legalist")
+			cathayan_target.mind.dharma?.roll_po(owner, cathayan_target)
+
+/datum/discipline_power/presence/awe
+	name = "Awe"
+	desc = "Make those around you admire and want to be closer to you."
+
+	level = 1
+	check_flags = DISC_CHECK_CONSCIOUS
+	target_type = TARGET_LIVING | TARGET_SELF
+	range = 7
+	duration_length = 15 SECONDS
+	cooldown_length = 15 SECONDS
+
+	var/list/affected_mobs = list()
+	var/list/owner_auras = list()
+	var/list/target_auras = list()
+
+/datum/discipline_power/presence/awe/pre_activation_checks(atom/target)
+	. = ..()
+	if(owner.client)
+		for(var/mob/living/T in owner_auras)
+			owner.client.images -= owner_auras[T]
+	owner_auras.Cut()
+
+	for(var/mob/living/T in target_auras)
+		if(T.client)
+			T.client.images -= target_auras[T]
+	target_auras.Cut()
+
+	affected_mobs.Cut()
+
+	if((owner.wear_mask && (owner.wear_mask.flags_inv & HIDEFACE) || (owner.head && (owner.head.flags_inv & HIDEFACE))))
+		to_chat(owner, span_warning("Твое лицо скрыто - ты никого не заворажил."))
+		return FALSE
+
+	var/list/targets_to_check = list()
+
+	if(target == owner)
+		for(var/mob/living/living_target in view(range, owner))
+			if(living_target != owner)
+				targets_to_check += living_target
+	else
+		if(get_dist(owner, target) <= range)
+			targets_to_check += target
+
+	for(var/mob/living/living_target in targets_to_check)
+		if(living_target.mass_presencer)
+			continue
+		if(get_trufaith_level(living_target) >= 3)
+			continue
+		var/success_chance = secret_vampireroll(get_a_charisma(owner)+get_a_performance(owner), 7, owner, TRUE)
+		if(success_chance >= 3)
+			affected_mobs += living_target
+
+	if(!affected_mobs.len)
+		to_chat(owner, span_warning("Тебе не удаётся ни на кого произвести впечатление."))
+		return FALSE
+	return TRUE
+
+/datum/discipline_power/presence/awe/activate(mob/living/target)
+	. = ..()
+	for(var/mob/living/living_target in affected_mobs)
+		if(isnpc(living_target))
+			var/mob/living/carbon/human/npc/npc_target = living_target
+			if(npc_target.danger_source == owner)
+				npc_target.danger_source = null
+		living_target.mass_presencer = owner
+
+		if(owner.a_intent == INTENT_HARM)
+			var/datum/cb = CALLBACK(living_target, TYPE_PROC_REF(/mob/living, walk_to_caster), owner)
+			for(var/i in 1 to 30)
+				addtimer(cb, (i - 1) * living_target.total_multiplicative_slowdown())
+
+		if(owner.client)
+			var/image/Io = image(icon = 'code/modules/wod13/icons.dmi', icon_state = "presence_2", layer = ABOVE_MOB_LAYER, loc = living_target)
+			owner.client.images |= Io
+			owner_auras[living_target] = Io
+
+		if(living_target.client)
+			var/image/It = image(icon = 'code/modules/wod13/icons.dmi', icon_state = "presence", layer = ABOVE_MOB_LAYER, loc = owner)
+			living_target.client.images |= It
+			target_auras[living_target] = It
+
+			var/text_sent = pick(
+				"Ты невольно обращаешь своё внимание на [owner.name].",
+				"Твой взгляд вдруг сам собой задерживается на [owner.name].",
+				"Среди окружающих [owner.name] начинает притягивать твоё внимание.",
+				"Тебе сложно не обращать внимания на [owner.name].",
+				"[owner.name] внезапно будто бы становится центром твоего внимания.")
+			to_chat(living_target, span_userlove(text_sent))
+			living_target.presence_text(text_sent)
+
+			if(iscarbon(living_target))
+				var/mob/living/carbon/C = living_target
+				if(C.has_trauma_type(/datum/brain_trauma/magic/presence_awe, TRAUMA_RESILIENCE_ABSOLUTE))
+					C.cure_trauma_type(/datum/brain_trauma/magic/presence_awe, TRAUMA_RESILIENCE_ABSOLUTE)
+				C.gain_trauma(new /datum/brain_trauma/magic/presence_awe(owner), TRAUMA_RESILIENCE_ABSOLUTE)
+
+
+/datum/discipline_power/presence/awe/deactivate()
+	. = ..()
+
+	if(owner.client)
+		for(var/mob/living/T in owner_auras)
+			owner.client.images -= owner_auras[T]
+	owner_auras.Cut()
+
+	for(var/mob/living/T in target_auras)
+		if(T.client)
+			T.client.images -= target_auras[T]
+	target_auras.Cut()
+
+	for(var/mob/living/living_target in affected_mobs)
+		if(iscarbon(living_target))
+			var/mob/living/carbon/C = living_target
+			if(C.has_trauma_type(/datum/brain_trauma/magic/presence_awe, TRAUMA_RESILIENCE_ABSOLUTE))
+				var/obj/item/organ/brain/B = C.getorganslot(ORGAN_SLOT_BRAIN)
+				for(var/datum/brain_trauma/magic/presence_awe/T in B.get_traumas_type(/datum/brain_trauma/magic/presence_awe, TRAUMA_RESILIENCE_ABSOLUTE))
+					if(T.trauma_caster == owner)
+						C.cure_trauma_type(T, TRAUMA_RESILIENCE_ABSOLUTE)
+
+		living_target.mass_presencer = null
+
+	affected_mobs.Cut()
+
+/atom/movable/screen/presence_text
+	icon = null
+	icon_state = ""
+	name = ""
+	screen_loc = "5,5"
+	layer = HUD_LAYER+0.02
+	plane = HUD_PLANE
+	alpha = 0
+
+/mob/living/proc/presence_text(text_to_send, color="#FF1493", shadow="#ff6dbc")
+	if(!mind)
+		return
+	if(!client)
+		return
+	if(!text_to_send)
+		return
+	if(client.presence_text)
+		client.screen -= client.presence_text
+		qdel(client.presence_text)
+		client.presence_text = null
+
+	var/atom/movable/screen/presence_text/T = new()
+	client.screen += T
+	T.maptext = {"<span style='vertical-align:top; text-align:center;
+				color: [color]; font-size: 150%; font-style: italic; font-weight: bold;
+				text-shadow: 0px 0px 6px [shadow], 0 0 12px [shadow];
+				font-family: "Blackmoor LET", "Pterra";'>[text_to_send]</span>"}
+	T.maptext_width = 205
+	T.maptext_height = 209
+	T.maptext_x = 12
+	T.maptext_y = 64
+	client.presence_text = T
+	playsound_local(src, 'sound/effects/presence_awe.ogg', 100, FALSE)
+	animate(T, alpha = 255, time = 10, easing = EASE_IN)
+	addtimer(CALLBACK(src, PROC_REF(clear_presence_text), T), 35)
+
+/mob/living/proc/clear_presence_text(atom/movable/screen/A)
+	if(!A)
+		return
+	if(!client)
+		return
+	animate(A, alpha = 0, time = 10, easing = EASE_OUT)
+	sleep(11)
+	if(client)
+		if(client.screen && A)
+			client.screen -= A
+			qdel(A)
+
+/mob/living/proc/walk_to_caster(mob/living/step_to)
+	walk(src, 0)
+	if(!CheckFrenzyMove())
+		set_glide_size(DELAY_TO_GLIDE_SIZE(total_multiplicative_slowdown()))
+		step_to(src, step_to, 0)
+		face_atom(step_to)
+
+//DREAD GAZE
+/datum/discipline_power/presence/dread_gaze
+	name = "Dread Gaze"
+	desc = "Incite fear in others through only your words and gaze."
+
+	level = 2
+
+	check_flags = DISC_CHECK_CAPABLE
+	range = 7
+	target_type = TARGET_LIVING | TARGET_SELF
+
+	cooldown_length = 15 SECONDS
+	duration_length = 15 SECONDS
+
+	var/list/affected_mobs = list()
+	var/list/owner_auras = list()
+	var/list/target_auras = list()
+
+/datum/discipline_power/presence/dread_gaze/pre_activation_checks(atom/target)
+	. = ..()
+	if(owner.client)
+		for(var/mob/living/T in owner_auras)
+			owner.client.images -= owner_auras[T]
+	owner_auras.Cut()
+
+	for(var/mob/living/T in target_auras)
+		if(T.client)
+			T.client.images -= target_auras[T]
+	target_auras.Cut()
+
+	affected_mobs.Cut()
+
+	var/list/targets_to_check = list()
+
+	if(target == owner)
+		for(var/mob/living/living_target in view(range, owner))
+			if(living_target != owner)
+				targets_to_check += living_target
+	else
+		if(get_dist(owner, target) <= range)
+			targets_to_check += target
+
+	for(var/mob/living/living_target in targets_to_check)
+		if(living_target.mass_presencer)
+			continue
+		if(get_trufaith_level(living_target) >= 3)
+			continue
+		var/consience = 0
+		if(ishuman(living_target))
+			var/mob/living/carbon/human/human_target = living_target
+			consience = human_target.MyPath?.consience
+		var/success_chance = secret_vampireroll(get_a_charisma(owner)+get_a_intimidation(owner), get_a_wits(living_target)+consience, owner, TRUE)
+		if(success_chance >= 3)
+			affected_mobs += living_target
+
+	if(!affected_mobs.len)
+		to_chat(owner, span_warning("Тебе не удаётся ни кого запугать."))
+		return FALSE
+	return TRUE
+
+/datum/discipline_power/presence/dread_gaze/activate(mob/living/target)
+	. = ..()
+	for(var/mob/living/living_target in affected_mobs)
+		living_target.emote(("scream"))
+		living_target.blur_eyes(7.5)
+		living_target.do_jitter_animation(15 SECONDS)
+		if(isnpc(living_target))
+			var/mob/living/carbon/human/npc/npc_target = living_target
+			if(npc_target.danger_source)
+				npc_target.danger_source = null
+		living_target.mass_presencer = owner
+
+		var/datum/cb = CALLBACK(living_target, TYPE_PROC_REF(/mob/living, step_away_caster), owner)
+		for(var/i in 1 to 30)
+			addtimer(cb, (i - 1) * living_target.total_multiplicative_slowdown())
+
+		if(owner.client)
+			var/image/Io = image(icon = 'code/modules/wod13/icons.dmi', icon_state = "presence_2", layer = ABOVE_MOB_LAYER, loc = living_target)
+			owner.client.images |= Io
+			owner_auras[living_target] = Io
+
+		if(living_target.client)
+			var/image/It = image(icon = 'code/modules/wod13/icons.dmi', icon_state = "presence", layer = ABOVE_MOB_LAYER, loc = owner)
+			living_target.client.images |= It
+			target_auras[living_target] = It
+			living_target.overlay_fullscreen("fear", /atom/movable/screen/fullscreen/fear, 1)
+
+		var/name_to_use = owner.name
+
+		if((owner.wear_mask && (owner.wear_mask.flags_inv & HIDEFACE) || (owner.head && (owner.head.flags_inv & HIDEFACE))))
+			name_to_use = "незнакомца"
+
+		var/text_sent = pick(
+			"Ужас из-за [name_to_use] срывает тебя с места!",
+			"Страх из-за [name_to_use] лишает тебя воли!",
+			"Одного присутствия [name_to_use] хватает, чтобы ты дрогнул!",
+			"От одного взгляда [name_to_use] ты срываешься в бег!",
+			"Паника из-за [name_to_use] становится невыносимой!")
+		to_chat(living_target, span_cult(text_sent))
+		living_target.presence_text(text_sent, color="#bf2020", shadow="#c14c4c")
+
+/datum/discipline_power/presence/dread_gaze/deactivate()
+	. = ..()
+
+	if(owner.client)
+		for(var/mob/living/living_target in owner_auras)
+			owner.client.images -= owner_auras[living_target]
+	owner_auras.Cut()
+
+	for(var/mob/living/living_target in target_auras)
+		if(living_target.client)
+			living_target.client.images -= target_auras[living_target]
+			living_target.clear_fullscreen("fear")
+	target_auras.Cut()
+
+	for(var/mob/living/living_target in affected_mobs)
+		living_target.mass_presencer = null
+
+	affected_mobs.Cut()
+
+/datum/discipline_power/presence/proc/presence_end(mob/living/target, mob/living/carbon/human/caster, initial_fights_anyway)
+	var/mob/living/carbon/human/npc/N = target
+	if(N && N.presence_master == caster)
+		// End presence effect
+		N.presence_master = null
+		N.add_movespeed_modifier(/datum/movespeed_modifier/npc)
+		N.presence_follow = FALSE
+		N.remove_overlay(MUTATIONS_LAYER)
+		N.presence_enemies = list()
+		N.danger_source = null
+		caster.puppets -= N
+		N.fights_anyway = initial_fights_anyway
+		if(!length(caster.puppets))
+			for(var/datum/action/presence_stay/VI in caster.actions)
+				if(VI)
+					VI.Remove(caster)
+			for(var/datum/action/presence_deaggro/VI in caster.actions)
+				if(VI)
+					VI.Remove(caster)
+
+//ENTRANCEMENT
+/datum/discipline_power/presence/entrancement
+	name = "Entrancement"
+	desc = "Manipulate minds by bending emotions to your will."
+
+	level = 3
+
+	check_flags = DISC_CHECK_CAPABLE|DISC_CHECK_SPEAK
+	target_type = TARGET_LIVING
+	range = 7
+
+	multi_activate = TRUE
+	cooldown_length = 15 SECONDS
+	duration_length = 5 SECONDS
+
+/datum/discipline_power/presence/entrancement/pre_activation_checks(mob/living/target)
+	if(get_trufaith_level(target) >= 3)
+		to_chat(owner, "<span class='warning'>Their faith protects them from your presence.</span>")
+		return FALSE
+	var/mypower = secret_vampireroll(max(get_a_charisma(owner), get_a_appearance(owner))+get_a_empathy(owner), get_a_willpower(target), owner)
+	if(mypower < 3)
+		to_chat(owner, "<span class='warning'>You fail at sway!</span>")
+		owner.emote("stare")
+		if(mypower == -1)
+			owner.Stun(3 SECONDS, TRUE)
+			owner.do_jitter_animation(10)
+		return FALSE
+
+	return TRUE
+
+/datum/discipline_power/presence/entrancement/activate(mob/living/target)
+	. = ..()
+	if(iscarbon(target))
+		var/mob/living/carbon/carbon_target = target
+		carbon_target.remove_overlay(MUTATIONS_LAYER)
+		var/mutable_appearance/presence_overlay = mutable_appearance('code/modules/wod13/icons.dmi', "presence", -MUTATIONS_LAYER)
+		presence_overlay.pixel_z = 1
+		carbon_target.overlays_standing[MUTATIONS_LAYER] = presence_overlay
+		carbon_target.apply_overlay(MUTATIONS_LAYER)
+
+
+	if(istype(target, /mob/living/carbon/human/npc) && owner.puppets.len < get_a_charisma(owner)+get_a_empathy(owner))
+		var/mob/living/carbon/human/npc/N = target
+		if(!N.presence_master)
+			if(!length(owner.puppets))
+				var/datum/action/presence_stay/E1 = new()
+				E1.Grant(owner)
+				var/datum/action/presence_deaggro/E2 = new()
+				E2.Grant(owner)
+			N.presence_master = owner
+			N.presence_follow = TRUE
+			N.remove_movespeed_modifier(/datum/movespeed_modifier/npc)
+			owner.puppets |= N
+			N.fights_anyway = TRUE
+			owner.whisper("Пойдем со мной...")
+
+	else
+		var/obj/item/I1 = target.get_active_held_item()
+		var/obj/item/I2 = target.get_inactive_held_item()
+		to_chat(target, "<span class='userlove'><b>PLEASE ME</b></span>")
+		owner.say("PLEASE ME!!")
+		target.face_atom(owner)
+		target.do_jitter_animation(3 SECONDS)
+		target.Immobilize(1 SECONDS)
+		target.drop_all_held_items()
+		if(I1)
+			I1.throw_at(get_turf(owner), 3, 1, target)
+		if(I2)
+			I2.throw_at(get_turf(owner), 3, 1, target)
+
+/datum/discipline_power/presence/entrancement/deactivate(mob/living/target)
+	. = ..()
+	if(iscarbon(target))
+		var/mob/living/carbon/carbon_target = target
+		carbon_target.remove_overlay(MUTATIONS_LAYER)
+
+//SUMMON
+/datum/discipline_power/presence/summon
+	name = "Summon"
+	desc = "Call anyone you've ever met to be by your side."
+
+	level = 4
+
+	check_flags = DISC_CHECK_CAPABLE|DISC_CHECK_SPEAK
+	target_type = TARGET_LIVING
+	range = 7
+
+	multi_activate = TRUE
+	cooldown_length = 15 SECONDS
+	duration_length = 5 SECONDS
+
+/datum/discipline_power/presence/summon/pre_activation_checks(mob/living/target)
+	if(get_trufaith_level(target) >= 3)
+		to_chat(owner, "<span class='warning'>Their faith protects them from your presence.</span>")
+		return FALSE
+	var/mypower = secret_vampireroll(max(get_a_charisma(owner), get_a_appearance(owner))+get_a_empathy(owner), get_a_willpower(target), owner)
+	if(mypower < 3)
+		to_chat(owner, "<span class='warning'>You fail at sway!</span>")
+		owner.emote("stare")
+		if(mypower == -1)
+			owner.Stun(3 SECONDS, TRUE)
+			owner.do_jitter_animation(10)
+		return FALSE
+
+	return TRUE
+
+/datum/discipline_power/presence/summon/activate(mob/living/target)
+	. = ..()
+	if(iscarbon(target))
+		var/mob/living/carbon/carbon_target = target
+		carbon_target.remove_overlay(MUTATIONS_LAYER)
+		var/mutable_appearance/presence_overlay = mutable_appearance('code/modules/wod13/icons.dmi', "presence", -MUTATIONS_LAYER)
+		presence_overlay.pixel_z = 1
+		carbon_target.overlays_standing[MUTATIONS_LAYER] = presence_overlay
+		carbon_target.apply_overlay(MUTATIONS_LAYER)
+
+	to_chat(target, "<span class='userlove'><b>FEAR ME</b></span>")
+	owner.say("FEAR ME!!")
+	var/datum/cb = CALLBACK(target, TYPE_PROC_REF(/mob/living, step_away_caster), owner)
+	for(var/i in 1 to 30)
+		addtimer(cb, (i - 1) * target.total_multiplicative_slowdown())
+	target.emote("scream")
+	target.do_jitter_animation(3 SECONDS)
+
+/datum/discipline_power/presence/summon/deactivate(mob/living/target)
+	. = ..()
+	if(iscarbon(target))
+		var/mob/living/carbon/carbon_target = target
+		carbon_target.remove_overlay(MUTATIONS_LAYER)
+
+/mob/living/proc/step_away_caster(mob/living/step_from)
+	walk(src, 0)
+	if(!CheckFrenzyMove())
+		set_glide_size(DELAY_TO_GLIDE_SIZE(total_multiplicative_slowdown()))
+		step_away(src, step_from, 99)
+
+//MAJESTY
+/datum/discipline_power/presence/majesty
+	name = "Majesty"
+	desc = "Become so grand that others find it nearly impossible to disobey or harm you."
+
+	level = 5
+
+	check_flags = DISC_CHECK_CAPABLE|DISC_CHECK_SPEAK
+	target_type = TARGET_LIVING
+	range = 7
+
+	multi_activate = TRUE
+	cooldown_length = 15 SECONDS
+	duration_length = 5 SECONDS
+
+/datum/discipline_power/presence/majesty/pre_activation_checks(mob/living/target)
+	if(get_trufaith_level(target) >= 3)
+		to_chat(owner, "<span class='warning'>Their faith protects them from your presence.</span>")
+		return FALSE
+	var/mypower = secret_vampireroll(max(get_a_charisma(owner), get_a_appearance(owner))+get_a_empathy(owner), get_a_willpower(target), owner)
+	if(mypower < 3)
+		to_chat(owner, "<span class='warning'>You fail at sway!</span>")
+		owner.emote("stare")
+		if(mypower == -1)
+			owner.Stun(3 SECONDS, TRUE)
+			owner.do_jitter_animation(10)
+		return FALSE
+
+	return TRUE
+
+/datum/discipline_power/presence/majesty/activate(mob/living/target)
+	. = ..()
+	if(iscarbon(target))
+		var/mob/living/carbon/carbon_target = target
+		carbon_target.remove_overlay(MUTATIONS_LAYER)
+		var/mutable_appearance/presence_overlay = mutable_appearance('code/modules/wod13/icons.dmi', "presence", -MUTATIONS_LAYER)
+		presence_overlay.pixel_z = 1
+		carbon_target.overlays_standing[MUTATIONS_LAYER] = presence_overlay
+		carbon_target.apply_overlay(MUTATIONS_LAYER)
+
+	to_chat(target, "<span class='userlove'><b>UNDRESS YOURSELF</b></span>")
+	owner.say("UNDRESS YOURSELF!!")
+	target.Immobilize(1 SECONDS)
+	for(var/obj/item/clothing/W in target.contents)
+		target.dropItemToGround(W, TRUE)
+
+/datum/discipline_power/presence/majesty/deactivate(mob/living/target)
+	. = ..()
+	if(iscarbon(target))
+		var/mob/living/carbon/carbon_target = target
+		carbon_target.remove_overlay(MUTATIONS_LAYER)
+
+/mob/living/carbon/human/npc/proc/handle_presence_movement()
+	if(!presence_master || stat >= DEAD)
+		return
+	if(presence_enemies.len)
+		var/dist = 100
+		var/mob/enemy = null
+		for(var/mob/i in presence_enemies)
+			if(get_dist(presence_master,i) < dist && i.stat < 2)
+				dist = get_dist(presence_master,i)
+				enemy = i
+		danger_source = enemy
+
+	if(!presence_follow && !danger_source)
+		walktarget = null
+	if(presence_follow)
+		if(presence_master.z == z && get_dist(src, presence_master) > 3)
+			walktarget = presence_master
+		else
+			walktarget = null
+	else
+		face_atom(presence_master)
+
+/* ACTIONS */
+
+/datum/action/presence_stay
+	name = "Stay/Follow (Presence)"
+	desc = "Tell your Presence-thralled NPC to stay put or follow."
+	button_icon_state = "wait"
+	var/cool_down = 0
+	var/following = TRUE
+	check_flags = AB_CHECK_HANDS_BLOCKED|AB_CHECK_IMMOBILE|AB_CHECK_LYING|AB_CHECK_CONSCIOUS
+
+/datum/action/presence_stay/Trigger()
+	. = ..()
+	if(ishuman(owner))
+		if(cool_down + 10 >= world.time)
+			return
+		cool_down = world.time
+		var/mob/living/carbon/human/H = owner
+			// flip “following” on or off
+		following = !following
+		if(following)
+			if(H.puppets.len == 1)
+				H.whisper(pick("Следуй.", "За мной.", "Сюда.", "Идем.", "Пошли."))
+			else if(H.puppets.len > 1)
+				H.whisper(pick("Следуйте.", "За мной.", "Сюда.", "Идемте.", "Пошли."))
+			to_chat(H, "Ты приказываешь своим подчиненным следовать за тобой.")
+			for(var/mob/living/carbon/human/npc/HPC in H.puppets)
+				if(HPC)
+					if(HPC.stat == 0 && !HPC.key && !HPC.IsSleeping() && !HPC.IsUnconscious() && !HPC.IsParalyzed() && !HPC.IsKnockdown() && !HPC.IsStun() && !HAS_TRAIT(HPC, TRAIT_RESTRAINED) && !HPC.pulledby)
+						HPC.staying = FALSE
+						HPC.forceMove(get_turf(H))
+		else
+			if(H.puppets.len == 1)
+				H.whisper(pick("Подожди.", "Стой.", "Замри.", "Стоп."))
+			else if(H.puppets.len > 1)
+				H.whisper(pick("Подождите.", "Стойте.", "Замрите.", "Стоп."))
+			to_chat(H, "Ты приказываешь своим подчиненным отстаться на месте.")
+			for(var/mob/living/carbon/human/npc/HPC in H.puppets)
+				if(HPC)
+					if(HPC.stat == 0 && !HPC.key && !HPC.IsSleeping() && !HPC.IsUnconscious() && !HPC.IsParalyzed() && !HPC.IsKnockdown() && !HPC.IsStun() && !HAS_TRAIT(HPC, TRAIT_RESTRAINED) && !HPC.pulledby)
+						HPC.staying = TRUE
+		for(var/mob/living/carbon/human/npc/N in GLOB.npc_list)
+			if(N.presence_master == H)
+				N.presence_follow = following
+
+/datum/action/presence_deaggro
+	name = "Loose Aggression (Presence)"
+	desc = "Command to stop your Presence-thralled NPC any aggressive moves."
+	button_icon_state = "deaggro"
+	check_flags = AB_CHECK_HANDS_BLOCKED|AB_CHECK_IMMOBILE|AB_CHECK_LYING|AB_CHECK_CONSCIOUS
+	var/cool_down = 0
+
+/datum/action/presence_deaggro/Trigger()
+	. = ..()
+	if(ishuman(owner))
+		if(cool_down+10 >= world.time)
+			return
+		cool_down = world.time
+		var/mob/living/carbon/human/H = owner
+		if(H.puppets.len == 1)
+			H.whisper(pick("Остановись.", "Хватит.", "Прекрати."))
+		else if(H.puppets.len > 1)
+			H.whisper(pick("Остановитесь.", "Хватит.", "Прекратите."))
+		to_chat(H, "Ты приказываешь своим подчиненным прекратить атаковать.")
+		for(var/mob/living/carbon/human/npc/N in H.puppets)
+			N.presence_enemies = list()
+			N.danger_source = null
+			N.a_intent = INTENT_HELP
+			N.walktarget = null

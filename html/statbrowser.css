@@ -1,0 +1,347 @@
+.light:root {
+	--scrollbar-base: #f2f2f2;
+	--scrollbar-thumb: #a7a7a7;
+	--bg-color: #ffffff;
+	--bg-secondary-color: #eeeeee;
+	--fg-color: #003399;
+	--fg-color-hover: #007fff;
+	--button-color: transparent;
+	--button-color-hover: #ececec;
+	--button-color-active: #dfdfdf;
+}
+
+html,
+body {
+	scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-base);
+}
+
+body {
+	font-family: Verdana, Geneva, Tahoma, sans-serif;
+	font-size: 12px;
+	margin: 0 !important;
+	padding: 0 !important;
+	overflow: hidden;
+}
+
+a {
+	color: var(--fg-color);
+	text-decoration: none;
+}
+
+a:hover {
+	color: var(--fg-color-hover);
+}
+
+h3 {
+	margin: 0 -0.5em 0.5em;
+	padding: 1em 0.66em 0.5em;
+	border-bottom: 0.1667em solid;
+}
+
+img {
+	-ms-interpolation-mode: nearest-neighbor;
+	image-rendering: pixelated;
+}
+
+.stat-container {
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
+}
+
+#menu {
+	display: flex;
+	overflow-x: auto;
+	overflow-y: hidden;
+	padding: 0.25em 0.25em 0;
+	background-color: var(--bg-color);
+}
+
+.menu-wrap {
+	flex-wrap: wrap-reverse;
+}
+
+#menu.tabs-classic {
+	padding: 0.15em;
+}
+
+#menu.tabs-classic .button {
+	min-width: 2em;
+	margin: 0.1em;
+	padding: 0.25em 0.4em;
+	border: 0;
+	border-radius: 0.25em;
+}
+
+#menu.tabs-classic .button.active {
+	background-color: var(--button-color);
+	color: var(--fg-color-hover);
+}
+
+.button {
+	display: inline-table;
+	cursor: pointer;
+	user-select: none;
+	-ms-user-select: none;
+	/* Remove after Byond 516 */
+	text-align: center;
+	font-size: 1em;
+	min-width: 2.9em;
+	padding: 0.5em 0.5em 0.4em;
+	background-color: transparent;
+	color: rgba(0, 0, 0, 0.5);
+	border: 0;
+	border-bottom: 0.1667em solid transparent;
+	border-radius: 0.25em 0.25em 0 0;
+}
+
+.button:hover {
+	background-color: var(--button-color-hover);
+}
+
+.button.active {
+	cursor: default;
+	background-color: var(--button-color-active);
+	color: black;
+	border-bottom-color: #000000;
+}
+
+#under-menu {
+	height: 0.5em;
+	background-color: var(--bg-secondary-color);
+}
+
+#under-content {
+	height: calc(0.5em - 4px);
+	background-color: var(--bg-secondary-color);
+}
+
+#statcontent {
+	flex: 1;
+	padding: 0.75em 0.5em;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.grid-container {
+	margin: -0.25em;
+}
+
+.grid-item {
+	display: inline-flex;
+	position: relative;
+	user-select: none;
+	-ms-user-select: none;
+	/* Remove after Byond 516 */
+	width: 100%;
+	max-height: 1.85em;
+	text-decoration: none;
+	background-color: transparent;
+	color: black;
+}
+
+.grid-item:hover,
+.grid-item:active {
+	color: var(--fg-color);
+	z-index: 1;
+}
+
+.grid-item-text {
+	display: inline-block;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	pointer-events: none;
+	width: 100%;
+	padding: 0.33em 0.5em;
+	border-radius: 0.25em;
+}
+
+.grid-item:hover .grid-item-text {
+	height: 100%;
+	overflow: visible;
+	white-space: normal;
+	background-color: var(--button-color-hover);
+}
+
+.grid-item:active .grid-item-text {
+	background-color: var(--button-color-active);
+}
+
+@media only screen and (min-width: 300px) {
+	.grid-item {
+		width: 50%;
+	}
+}
+
+@media only screen and (min-width: 430px) {
+	.grid-item {
+		width: 33%;
+	}
+}
+
+@media only screen and (min-width: 560px) {
+	.grid-item {
+		width: 25%;
+	}
+}
+
+@media only screen and (min-width: 770px) {
+	.grid-item {
+		width: 20%;
+	}
+}
+
+.status-info {
+	margin: 0 0.33em 0.25em;
+}
+
+.interview_panel_stats,
+.interview_panel_controls {
+	margin-bottom: 1em;
+}
+
+/**
+ * MARK: VTM (Vampire The Masquerade) theme colors
+ */
+.vampire:root {
+	--scrollbar-base: #0f0202;
+	--scrollbar-thumb: #2d0909;
+	--bg-color: #251313;
+	--bg-secondary-color: #392121;
+	--fg-color: #d4a574;
+	--fg-color-hover: #e6b888;
+	--button-color: transparent;
+	--button-color-hover: #2d0909;
+	--button-color-active: #3d1111;
+}
+
+/**
+ * MARK: Dark theme colors
+ */
+.dark:root {
+	--color-base: #151515;
+	--scrollbar-base: #151515;
+	--scrollbar-thumb: #363636;
+}
+
+body.dark {
+	background-color: #151515;
+	color: #b2c4dd;
+}
+
+.dark a {
+	color: #6699ff;
+}
+
+.dark a:hover,
+.dark .grid-item:hover,
+.dark .grid-item:active {
+	color: #80bfff;
+}
+
+.dark #menu {
+	background-color: #151515;
+}
+
+.dark #menu.tabs-classic .button.active {
+	background-color: #20b142;
+}
+
+.dark .button {
+	color: rgba(255, 255, 255, 0.5);
+}
+
+.dark .button:hover {
+	background-color: #252525;
+}
+
+.dark .button.active {
+	background-color: #313131;
+	color: #d4dfec;
+	border-bottom-color: #d4dfec;
+}
+
+.dark #under-menu,
+.dark #under-content {
+	background-color: #202020;
+}
+
+.dark .grid-item {
+	color: #b2c4dd;
+}
+
+.dark .grid-item:hover .grid-item-text {
+	background-color: #252525;
+}
+
+.dark .grid-item:active .grid-item-text {
+	background-color: #313131;
+}
+
+body.vampire {
+	background-color: var(--bg-color);
+	color: var(--fg-color);
+	scrollbar-base-color: #0f0202;
+	scrollbar-face-color: #2d0909;
+	scrollbar-3dlight-color: #1a0505;
+	scrollbar-highlight-color: #1a0505;
+	scrollbar-track-color: #0f0202;
+	scrollbar-arrow-color: #d4a574;
+}
+
+.vampire {
+	.button {
+		color: rgba(212, 165, 116, 0.8);
+	}
+
+	a {
+		color: #b83d3d;
+		text-decoration: none;
+	}
+
+	a:hover {
+		color: #cc5555;
+	}
+
+	.button:hover {
+		background-color: hsl(0, 35%, 15%);
+		border-bottom: 2px solid hsl(0, 45%, 25%);
+	}
+
+	#menu.tabs-classic .button.active {
+		background-color: var(--button-color);
+		color: var(--fg-color-hover);
+	}
+
+	.button.active {
+		background-color: hsl(0, 50%, 20%);
+		color: hsl(45, 80%, 70%);
+		text-shadow: 0 0 2px rgba(218, 165, 32, 0.8);
+		border-bottom: 2px solid hsl(45, 60%, 40%);
+	}
+
+	.grid-item {
+		color: var(--fg-color);
+	}
+
+	.grid-item:hover,
+	.grid-item:active {
+		color: var(--fg-color-hover);
+		z-index: 1;
+	}
+
+	.grid-item:hover .grid-item-text {
+		color: var(--fg-color-hover);
+		background-color: var(--button-color-hover);
+	}
+
+	.grid-item:active .grid-item-text {
+		color: var(--fg-color-hover);
+		background-color: var(--button-color-active);
+	}
+
+	h3 {
+		color: var(--fg-color-hover);
+	}
+}

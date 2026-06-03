@@ -1,0 +1,4 @@
+author: "carp-cleaner"
+delete-after: True
+changes:
+  - rscadd: "Реальный возраст катаян увеличен с биологического до 500 лет."

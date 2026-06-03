@@ -1,0 +1,13 @@
+#define MILLENIUM_TOWER_NETWORK "millennium_tower"
+#define LASOMBRA_NETWORK "lasombra"
+#define TREMERE_NETWORK "tremere"
+#define GIOVANNI_NETWORK "giovanni"
+#define TZMISCE_NETWORK "tzimisce"
+#define ANARCH_NETWORK "anarchs"
+#define WAREHOUSE_NETWORK "warehouse"
+#define TRIADS_NETWORK "triads"
+#define VAMPIRE_LEADER_NETWORK "vampire_leader"
+
+#define WEAVER_NETWORK "weaver"
+#define WYRM_NETWORK "wyrm"
+#define GAIA_NETWORK "gaia"

@@ -1,0 +1,6 @@
+author: "TwitterTwiner"
+delete-after: True
+changes:
+  - bugfix: "Хим костюм"
+  - bugfix: "тактика ГОРШКА"
+  - code_imp: "Сделал отдельную папку от логику НПС, файл с листом для инвентаря"

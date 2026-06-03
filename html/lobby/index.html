@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+	<title>World of Darkness</title>
+	<style>
+		@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&display=swap');
+
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			background: linear-gradient(135deg, #1a0000 0%, #330000 25%, #1a0000 50%, #660000 75%, #1a0000 100%);
+			background-size: 400% 400%;
+			animation: backgroundShift 8s ease-in-out infinite;
+			color: #d4af37;
+			font-family: 'Cinzel', serif;
+			height: 100vh;
+			overflow: hidden;
+			position: relative;
+		}
+
+		@keyframes backgroundShift {
+			0%, 100% { background-position: 0% 50%; }
+			50% { background-position: 100% 50%; }
+		}
+
+		.background-overlay {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: radial-gradient(circle at center, transparent 20%, rgba(0,0,0,0.7) 80%);
+			pointer-events: none;
+		}
+
+		.title {
+			position: absolute;
+			top: 8%;
+			left: 50%;
+			transform: translateX(-50%);
+			text-align: center;
+			z-index: 10;
+		}
+
+		.title h1 {
+			font-size: 4.5rem;
+			font-weight: 700;
+			color: #d4af37;
+			text-shadow:
+				0 0 10px rgba(212, 175, 55, 0.8),
+				0 0 20px rgba(212, 175, 55, 0.6),
+				0 0 30px rgba(212, 175, 55, 0.4),
+				2px 2px 4px rgba(0,0,0,0.8);
+			letter-spacing: 8px;
+			margin-bottom: 10px;
+		}
+
+		.title h2 {
+			font-size: 2rem;
+			font-weight: 400;
+			color: #b8860b;
+			text-shadow: 0 0 10px rgba(184, 134, 11, 0.6), 2px 2px 4px rgba(0,0,0,0.8);
+			letter-spacing: 4px;
+		}
+
+		.menu-container {
+			position: absolute;
+			top: 60%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 15px;
+			z-index: 10;
+		}
+
+		.menu-button {
+			background: none;
+			border: none;
+			padding: 15px 40px;
+			font-family: 'Cinzel', serif;
+			font-size: 1.3rem;
+			font-weight: 600;
+			color: #d4af37;
+			text-decoration: none;
+			text-align: center;
+			min-width: 250px;
+			transition: all 0.3s ease;
+			text-shadow:
+				0 0 10px rgba(212, 175, 55, 0.8),
+				0 0 20px rgba(212, 175, 55, 0.6),
+				2px 2px 4px rgba(0,0,0,0.8);
+			position: relative;
+			overflow: hidden;
+		}
+
+		.menu-button:hover {
+			color: #ffdd44;
+			transform: translateY(-3px) scale(1.02);
+			text-shadow:
+				0 0 15px rgba(255, 221, 68, 0.9),
+				0 0 30px rgba(255, 221, 68, 0.7),
+				0 0 45px rgba(255, 221, 68, 0.5),
+				2px 2px 6px rgba(0,0,0,0.9);
+		}
+
+		.menu-button:active {
+			transform: translateY(-1px) scale(1.01);
+		}
+
+		.hidden {
+			display: none !important;
+		}
+
+		.fire-container {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			width: 100%;
+			height: 300px;
+			overflow: hidden;
+			pointer-events: none;
+		}
+
+		.ember {
+			position: absolute;
+			border-radius: 50%;
+			animation: ember-rise linear infinite;
+		}
+
+		.ember.small {
+			width: 2px;
+			height: 2px;
+			background: radial-gradient(circle, #ff6500 0%, #ff4500 70%, transparent 100%);
+			box-shadow: 0 0 4px #ff6500;
+		}
+
+		.ember.medium {
+			width: 4px;
+			height: 4px;
+			background: radial-gradient(circle, #ff8500 0%, #ff6500 50%, #ff4500 80%, transparent 100%);
+			box-shadow: 0 0 6px #ff8500;
+		}
+
+		.ember.large {
+			width: 6px;
+			height: 6px;
+			background: radial-gradient(circle, #ffa500 0%, #ff8500 40%, #ff6500 70%, transparent 100%);
+			box-shadow: 0 0 8px #ffa500;
+		}
+
+		.ember.spark {
+			width: 1px;
+			height: 8px;
+			background: linear-gradient(to top, #ffff00 0%, #ff8500 50%, transparent 100%);
+			border-radius: 50%;
+			box-shadow: 0 0 3px #ffff00;
+		}
+
+		@keyframes ember-rise {
+			0% {
+				transform: translateY(0) translateX(0) rotate(0deg);
+				opacity: 1;
+			}
+			20% {
+				opacity: 0.9;
+			}
+			80% {
+				opacity: 0.3;
+			}
+			100% {
+				transform: translateY(var(--rise-height, -300px)) translateX(var(--drift, 0px)) rotate(var(--rotation, 0deg));
+				opacity: 0;
+			}
+		}
+
+		.decoration-left,
+		.decoration-right {
+			position: absolute;
+			top: 30%;
+			width: 200px;
+			height: 250px;
+			background-image: url('nosferatu.png');
+			background-size: contain;
+			background-repeat: no-repeat;
+			background-position: center;
+			opacity: 0.7;
+			filter: sepia(100%) hue-rotate(320deg) saturate(300%) brightness(0.8);
+			transition: all 0.3s ease;
+		}
+
+		.decoration-left {
+			left: 5%;
+			transform: scaleX(-1) rotate(-5deg);
+		}
+
+		.decoration-right {
+			right: 5%;
+			transform: rotate(5deg);
+		}
+
+		.decoration-left:hover,
+		.decoration-right:hover {
+			opacity: 0.9;
+			filter: sepia(100%) hue-rotate(320deg) saturate(400%) brightness(1);
+			transform: scale(1.05) rotate(0deg);
+		}
+
+		.decoration-left:hover {
+			transform: scaleX(-1) scale(1.05) rotate(0deg);
+		}
+	</style>
+</head>
+
+<body>
+	<div class="background-overlay"></div>
+
+	<div class="decoration-left"></div>
+	<div class="decoration-right"></div>
+
+	<div class="title">
+		<h1>DARKNESS:</h1>
+		<h2>The Collapse</h2>
+	</div>
+
+	<div class="menu-container">
+		<a href='byond://?src=[player-ref];show_preferences=1' id="setup" class="menu-button">
+			Setup Character
+		</a>
+
+		<a href='byond://?src=[player-ref];late_party=1' id="late-party" class="menu-button">
+			Late Party: <span id="late-party-text">Yes</span>
+		</a>
+
+		<a href='byond://?src=[player-ref];manifest=1' id="manifest" class="menu-button">
+			View Population
+		</a>
+
+		<a href='byond://?src=[player-ref];ready=1' id="ready" class="menu-button">
+			<span id="ready-text">Ready</span>
+		</a>
+
+		<a href='byond://?src=[player-ref];late_join=1' id="join" class="menu-button">
+			Join!
+		</a>
+
+		<a href='byond://?src=[player-ref];observe=1' id="observe" class="menu-button">
+			Observe
+		</a>
+	</div>
+
+	<div class="fire-container" id="fire-container"></div>
+
+	<script type="text/javascript">
+		var latePartyBtn = document.getElementById("late-party");
+		var latePartyText = document.getElementById("late-party-text");
+
+		var readyBtn = document.getElementById("ready");
+		var readyText = document.getElementById("ready-text");
+
+		var joinBtn = document.getElementById("join");
+		var manifestBtn = document.getElementById("manifest");
+		var observeBtn = document.getElementById("observe");
+
+		var currentRunlevel = null;
+
+		var GAME_STATE_STARTUP = 0;
+		var GAME_STATE_PREGAME = 1;
+		var GAME_STATE_SETTING_UP = 2;
+		var GAME_STATE_PLAYING = 3;
+
+		function clamp(v, min, max) {
+			return Math.max(Math.min(v, max), min);
+		}
+
+		function hide(el) {
+			if (el) {
+				el.classList.add("hidden");
+			}
+		}
+
+		function show(el) {
+			if (el) {
+				el.classList.remove("hidden");
+			}
+		}
+
+		function setReadyStatus(ready) {
+			if (ready == "1") {
+				readyText.innerText = "Ready";
+				readyBtn.style.color = "#00ff44";
+				readyBtn.style.textShadow = "0 0 15px rgba(0, 255, 68, 0.9), 0 0 30px rgba(0, 255, 68, 0.7), 2px 2px 6px rgba(0,0,0,0.9)";
+			} else {
+				readyText.innerText = "Not Ready";
+				readyBtn.style.color = "#d4af37";
+				readyBtn.style.textShadow = "0 0 10px rgba(212, 175, 55, 0.8), 0 0 20px rgba(212, 175, 55, 0.6), 2px 2px 4px rgba(0,0,0,0.8)";
+			}
+		}
+
+		function setLatePartyStatus(lateParty) {
+			if (lateParty == "1") {
+				latePartyText.innerText = "Yes";
+				latePartyBtn.style.color = "#ffaa00";
+				latePartyBtn.style.textShadow = "0 0 15px rgba(255, 170, 0, 0.9), 0 0 30px rgba(255, 170, 0, 0.7), 2px 2px 6px rgba(0,0,0,0.9)";
+			} else {
+				latePartyText.innerText = "No";
+				latePartyBtn.style.color = "#d4af37";
+				latePartyBtn.style.textShadow = "0 0 10px rgba(212, 175, 55, 0.8), 0 0 20px rgba(212, 175, 55, 0.6), 2px 2px 4px rgba(0,0,0,0.8)";
+			}
+		}
+
+		function setStatus(message) {
+			var contents = message.split("-");
+			var state = clamp(Number(contents[0]), GAME_STATE_STARTUP, GAME_STATE_PLAYING);
+			var ready = contents[1];
+			var lateParty = contents[2];
+
+			setReadyStatus(ready);
+			setLatePartyStatus(lateParty);
+			currentRunlevel = state;
+
+			document.querySelectorAll('.menu-button').forEach(item => {
+				item.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+			});
+
+			switch (state) {
+				case GAME_STATE_STARTUP:
+				case GAME_STATE_PREGAME:
+					hide(joinBtn);
+					show(readyBtn);
+					hide(observeBtn);
+					break;
+
+				case GAME_STATE_SETTING_UP:
+					hide(joinBtn);
+					show(readyBtn);
+					show(observeBtn);
+					break;
+
+				case GAME_STATE_PLAYING:
+					show(joinBtn);
+					hide(readyBtn);
+					show(observeBtn);
+					break;
+			}
+		}
+
+		function byondDecode(message) {
+			message = message.replace(/\+/g, "%20");
+			try {
+				if (decodeURIComponent) {
+					message = decodeURIComponent(message);
+				}
+			}
+			catch (err) {
+				message = unescape(message);
+			}
+			return message;
+		}
+
+		function addHoverEffects() {
+			document.querySelectorAll('.menu-button').forEach(button => {
+				button.addEventListener('mouseenter', function () {
+					this.style.transform = 'translateY(-3px) scale(1.02)';
+				});
+
+				button.addEventListener('mouseleave', function () {
+					this.style.transform = 'translateY(0) scale(1)';
+				});
+			});
+		}
+
+		function createFireEffect() {
+			const fireContainer = document.getElementById('fire-container');
+
+			function createEmber() {
+				const ember = document.createElement('div');
+				ember.className = 'ember';
+
+				const types = ['small', 'medium', 'large', 'spark'];
+				const type = types[Math.floor(Math.random() * types.length)];
+				ember.classList.add(type);
+
+				ember.style.left = Math.random() * 100 + '%';
+				ember.style.bottom = '0px';
+
+				const drift = (Math.random() * 100 - 50);
+				const riseHeight = -(200 + Math.random() * 200);
+				const rotation = Math.random() * 720 - 360;
+				const duration = 3 + Math.random() * 4;
+
+				ember.style.setProperty('--drift', drift + 'px');
+				ember.style.setProperty('--rise-height', riseHeight + 'px');
+				ember.style.setProperty('--rotation', rotation + 'deg');
+				ember.style.animationDuration = duration + 's';
+				ember.style.animationDelay = Math.random() * 0.5 + 's';
+
+				fireContainer.appendChild(ember);
+
+				setTimeout(() => {
+					if (ember.parentNode) {
+						ember.parentNode.removeChild(ember);
+					}
+				}, (duration + 0.5) * 1000);
+			}
+
+			function startEmberGeneration() {
+				for (let i = 0; i < 30; i++) {
+					setTimeout(createEmber, Math.random() * 2000);
+				}
+
+				setInterval(createEmber, 50);
+			}
+
+			startEmberGeneration();
+		}
+
+		setReadyStatus(0);
+		addHoverEffects();
+
+		window.location = "?src=[player-ref]&lobby_init=1";
+		createFireEffect();
+	</script>
+</body>
+
+</html>

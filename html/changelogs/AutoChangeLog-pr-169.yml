@@ -1,0 +1,4 @@
+author: "Nokia2Student"
+delete-after: True
+changes:
+  - bugfix: "Хомиды больше не получают рейдж в своей родной форме"

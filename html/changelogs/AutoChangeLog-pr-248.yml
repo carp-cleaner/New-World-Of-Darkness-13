@@ -1,0 +1,6 @@
+author: "RecruitNS"
+delete-after: True
+changes:
+  - rscadd: "Новые шмотки (+перчатки в лодаут сватов)"
+  - rscdel: "Убраны у сватовцев старые шмотки"
+  - sound: "Добавлен звук прибытия свата"
