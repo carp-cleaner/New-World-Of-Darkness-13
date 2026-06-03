@@ -114,7 +114,7 @@
 
 	if(key)
 		if(new_character.key != key)					//if we're transferring into a body with a key associated which is not ours
-			addtimer(CALLBACK(new_character, TYPE_PROC_REF(/mob, ghostize), 1), 0) //we'll need to ghostize so that key isn't mobless.
+			addtimer(CALLBACK(new_character, TYPE_PROC_REF(/mob, ghostize), 1, FALSE, TRUE), 0) //we'll need to ghostize so that key isn't mobless.
 	else
 		key = new_character.key
 
