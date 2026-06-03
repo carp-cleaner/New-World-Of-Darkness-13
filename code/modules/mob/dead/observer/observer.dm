@@ -420,7 +420,10 @@ Transfer_mind is there to check if mob is being deleted/not going to have a body
 Works together with spawning an observer, noted above.
 */
 
-/mob/proc/ghostize(can_reenter_corpse = TRUE, aghosted = FALSE)
+/mob/proc/ghostize(can_reenter_corpse = TRUE, aghosted = FALSE, check_key = FALSE)
+	if(check_key)
+		if(stat != DEAD && client)
+			return
 	if(key)
 	/*
 		if(client)
@@ -747,6 +750,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	client.view_size.setDefault(getScreenSize(client.prefs.widescreenpref))//Let's reset so people can't become allseeing gods
 	// client.show_popup_menus = FALSE
 	SStgui.on_transfer(src, mind.current) // Transfer NanoUIs.
+	mind.current.remove_movespeed_modifier(/datum/movespeed_modifier/ghost_varspeed)
 	mind.current.key = key
 	mind.current.client.init_verbs()
 	original_body.soul_state = SOUL_PRESENT
