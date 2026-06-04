@@ -168,7 +168,7 @@
 */
 
 /datum/outfit/job/sabbatist/proc/random_clane()
-	var/clan = pick(/datum/vampireclane/gangrel/city, /datum/vampireclane/brujah, /datum/vampireclane/nosferatu, /datum/vampireclane/toreador)
+	var/clan = pick(/datum/vampireclane/city_gangrel, /datum/vampireclane/brujah, /datum/vampireclane/nosferatu, /datum/vampireclane/toreador)
 	return clan
 
 /datum/outfit/job/sabbatist/proc/make_shovelhaed(mob/living/carbon/human/H)
