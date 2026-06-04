@@ -1,4 +1,4 @@
-/datum/vampireclane/gangrel/city
+/datum/vampireclane/city_gangrel
 	name = "City Gangrel"
 	desc = "Гангрелы приспособленные к городской среде. Антитрибу шабаша. Городские Гангрелы – великолепные городские хищники, они оттачивают свои инстинкты для удовлетворения своей жажды."
 	clane_disciplines = list(
