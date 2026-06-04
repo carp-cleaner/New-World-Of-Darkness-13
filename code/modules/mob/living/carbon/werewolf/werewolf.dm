@@ -118,7 +118,7 @@
 	if(apply_stun_self)
 		Stun(1 SECONDS, TRUE)
 	shake_camera(src, 5, 4)
-		if(pref_species.id == "kindred")
+	if(pref_species.id == "kindred")
 		if(owner.CheckEyewitness(owner, owner, 7, FALSE))
 			owner.AdjustMasquerade(-1)
 
